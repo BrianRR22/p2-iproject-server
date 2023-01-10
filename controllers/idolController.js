@@ -1,10 +1,37 @@
-const { Idol } = require('../models')
-const axios = require('axios')
+const { Idol, Branch } = require('../models')
+const axios = require('axios');
+const { Op } = require('sequelize');
 
 class IdolController {
     static async showIdol(req, res, next) {
+        const { filter } = req.query;
+        const paramQuerySQL = {
+            include: [
+                {
+                    model: Branch,
+                    attributes:{
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                }
+            ],
+            attributes:{
+                exclude: ['createdAt', 'updatedAt']
+            },
+            order: [['id', 'asc']]
+        };
+
+        // filtering by category
+        if (filter !== '' && typeof filter !== 'undefined') {
+            const query = filter.branch.split(',').map((item) => ({
+                [Op.eq]: item,
+            }));
+
+            paramQuerySQL.where = {
+                BranchId: { [Op.or]: query },
+            };
+        }
         try {
-            let data = await Idol.findAll()
+            let data = await Idol.findAll(paramQuerySQL)
             res.status(200).json(data)
         } catch (error) {
             console.log(error);
@@ -60,14 +87,14 @@ class IdolController {
 
         axios.request(options).then(function (response) {
             console.log(response.data);
-            
-            let statistics= response.data.stats
+
+            let statistics = response.data.stats
             // let songs = response.data.data.artist.discography.singles.items
             res.status(200).json({
                 title: response.data.title,
                 username: response.data.username,
                 joined: response.data.joinedDateText,
-                url: 'https://www.youtube.com/channel/'+youtubeId,
+                url: 'https://www.youtube.com/channel/' + youtubeId,
                 statistics,
                 description: response.data.description,
             });
