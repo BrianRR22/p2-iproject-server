@@ -1,6 +1,6 @@
 const { comparePassword } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
-const { Idol, User } = require('../models')
+const { Idol, User, Favorite, Branch } = require('../models')
 
 
 class UserController {
@@ -34,6 +34,55 @@ class UserController {
             }
             let access_token = createToken(payload)
             res.status(200).json({ access_token, username: user.username })
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async addFavoriteNews(req, res, next) {
+        try {
+            let IdolId = req.params.IdolId
+            let findIdol = await Idol.findOne({
+                where: { id: IdolId }
+            })
+            if (!findIdol) {
+                throw { name: 'Data Not Found' }
+            }
+            let UserId = req.user.id
+            let data = await Favorite.create({ IdolId, UserId })
+            res.status(201).json({
+                message: "Success Add Favorite Idol",
+                idol: data
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async favoriteNewsList(req, res, next) {
+        try {
+            let UserId = req.user.id
+            let data = await Idol.findAll({
+                include: [
+                    {
+                        model: Branch,
+                        attributes:{
+                            exclude: ['createdAt', 'updatedAt']
+                        }
+                    },
+                    {
+                        model: Favorite,
+                        where: { UserId },
+                        attributes:{
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                        right: true
+                    },
+                ],
+                attributes:{
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                order: [['id', 'asc']]
+            })
+            res.status(200).json(data)
         } catch (error) {
             next(error)
         }

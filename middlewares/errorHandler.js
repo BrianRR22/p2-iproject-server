@@ -25,6 +25,10 @@ module.exports = (error, req, res, next) => {
             status = 401
             message = 'Error Authentication'
             break
+        case 'Data Not Found':
+            status = 404
+            message = 'Data Not Found'
+            break
     }
     res.status(status).json({ message })
 }
