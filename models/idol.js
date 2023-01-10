@@ -17,11 +17,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Idol.init({
     spotifyId: DataTypes.STRING,
+    youtubeId: DataTypes.STRING,
     name: DataTypes.STRING,
     content: DataTypes.TEXT,
     imgUrl: DataTypes.TEXT,
     fanName: DataTypes.STRING,
-    debut: DataTypes.DATE,
+    debut: DataTypes.STRING,
     BranchId: DataTypes.INTEGER
   }, {
     sequelize,

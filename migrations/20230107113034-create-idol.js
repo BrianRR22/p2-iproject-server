@@ -12,6 +12,9 @@ module.exports = {
       spotifyId: {
         type: Sequelize.STRING
       },
+      youtubeId: {
+        type: Sequelize.STRING
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -29,7 +32,7 @@ module.exports = {
         allowNull: false
       },
       debut: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
         allowNull: false
       },
       BranchId: {
