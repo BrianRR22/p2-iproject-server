@@ -16,6 +16,7 @@ module.exports = (error, req, res, next) => {
             status = 401
             break;
         case 'SequelizeValidationError':
+        case 'SequelizeUniqueConstraintError':
             message = error.errors[0].message
             status = 400
             break;
