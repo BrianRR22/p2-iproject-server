@@ -38,6 +38,14 @@ class IdolController {
             next(error)
         }
     }
+    static async showBranches(req, res, next) {
+        try {
+            let data = await Branch.findAll()
+            res.status(200).json(data)
+        } catch (error) {
+            next(error)
+        }
+    }
     static idolSong(req, res, next) {
         let id = req.params.id
         const options = {
