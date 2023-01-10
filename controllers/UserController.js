@@ -3,12 +3,25 @@ const { createToken } = require('../helpers/jwt')
 const { Idol, User } = require('../models')
 
 
-class UserController{
-    static async login(req, res, next){
+class UserController {
+    static async register(req, res, next) {
         try {
-            let {email, password}= req.body
-            if(!email)throw{name: 'Email is required'}
-            if(!password)throw{name: 'Password is required'}
+            let { username, email, password } = req.body
+            let customer = await User.create({ username, email, password })
+            res.status(201).json({
+                message: `Customer with email ${customer.email} has been created with id ${customer.id}`,
+                id: customer.id,
+                email: customer.email
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async login(req, res, next) {
+        try {
+            let { email, password } = req.body
+            if (!email) throw { name: 'Email is required' }
+            if (!password) throw { name: 'Password is required' }
             let user = await User.findOne({ where: { email } })
             if (!user) {
                 throw { name: 'InvalidCredentials' }
@@ -27,4 +40,4 @@ class UserController{
     }
 }
 
-module.exports= UserController
+module.exports = UserController

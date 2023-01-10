@@ -15,6 +15,10 @@ module.exports = (error, req, res, next) => {
             message = 'Email/Password Invalid'
             status = 401
             break;
+        case 'SequelizeValidationError':
+            message = error.errors[0].message
+            status = 400
+            break;
     }
     res.status(status).json({ message })
 }
