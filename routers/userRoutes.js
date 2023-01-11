@@ -11,7 +11,7 @@ router.post('/generate-midtrans-token', authentication, UserController.generateM
 router.get('/idols/favorites', authentication, UserController.favoriteIdolList)
 router.patch('/subscription', UserController.subscription)
 router.post('/idols/:IdolId', authentication, UserController.addFavoriteIdol)
-router.patch('/subscription', UserController.subscription)
+router.delete('/idols/:id', authentication, UserController.deleteFavoriteIdol)
 
 
 
