@@ -5,11 +5,11 @@ module.exports = (error, req, res, next) => {
     switch (error.name) {
         case 'Email is required':
             message = 'Email is required'
-            status = 404
+            status = 400
             break;
         case 'Password is required':
             message = 'Password is required'
-            status = 404
+            status = 400
             break;
         case 'InvalidCredentials':
             message = 'Email/Password Invalid'

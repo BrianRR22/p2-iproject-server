@@ -54,7 +54,6 @@ class UserController {
             let data = await Favorite.create({ IdolId, UserId })
             res.status(201).json({
                 message: "Success Add Favorite Idol",
-                idol: data
             })
         } catch (error) {
             next(error)
@@ -164,7 +163,7 @@ class UserController {
                 throw { name: 'Data Not Found' }
             }
             let data = await Favorite.destroy({ where: {id} })
-            res.status(201).json({
+            res.status(200).json({
                 message: "Success Delete Favorite Idol"
             })
         } catch (error) {
