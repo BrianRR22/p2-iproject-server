@@ -57,13 +57,15 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Password is required!'
         }
       }
-    }
+    },
+    isSubscribed: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',
   });
   User.beforeCreate((user) => {
     user.password = hashPassword(user.password);
+    user.isSubscribed= false
   });
   return User;
 };
