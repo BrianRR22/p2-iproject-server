@@ -154,6 +154,23 @@ class UserController {
             next(error)
         }
     }
+    static async deleteFavoriteIdol(req, res, next) {
+        try {
+            let id = req.params.id
+            let findFavorite = await Favorite.findOne({
+                where: { id }
+            })
+            if (!findFavorite) {
+                throw { name: 'Data Not Found' }
+            }
+            let data = await Favorite.destroy({ where: {id} })
+            res.status(201).json({
+                message: "Success Delete Favorite Idol"
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = UserController
