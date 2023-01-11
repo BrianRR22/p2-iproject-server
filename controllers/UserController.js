@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { comparePassword } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
 const { Idol, User, Favorite, Branch } = require('../models')
@@ -58,30 +59,42 @@ class UserController {
         }
     }
     static async favoriteNewsList(req, res, next) {
-        try {
-            let UserId = req.user.id
-            let data = await Idol.findAll({
-                include: [
-                    {
-                        model: Branch,
-                        attributes:{
-                            exclude: ['createdAt', 'updatedAt']
-                        }
-                    },
-                    {
-                        model: Favorite,
-                        where: { UserId },
-                        attributes:{
-                            exclude: ['createdAt', 'updatedAt']
-                        },
-                        right: true
-                    },
-                ],
-                attributes:{
-                    exclude: ['createdAt', 'updatedAt']
+        const { filter } = req.query;
+        let UserId = req.user.id
+        const paramQuerySQL = {
+            include: [
+                {
+                    model: Branch,
+                    attributes:{
+                        exclude: ['createdAt', 'updatedAt']
+                    }
                 },
-                order: [['id', 'asc']]
-            })
+                {
+                    model: Favorite,
+                    where: { UserId },
+                    attributes:{
+                        exclude: ['createdAt', 'updatedAt']
+                    },
+                    right: true
+                },
+            ],
+            attributes:{
+                exclude: ['createdAt', 'updatedAt']
+            },
+            order: [['id', 'asc']]};
+
+        // filtering by category
+        if (filter !== '' && typeof filter !== 'undefined') {
+            const query = filter.branch.split(',').map((item) => ({
+                [Op.eq]: item,
+            }));
+
+            paramQuerySQL.where = {
+                BranchId: { [Op.or]: query },
+            };
+        }
+        try {
+            let data = await Idol.findAll(paramQuerySQL)
             res.status(200).json(data)
         } catch (error) {
             next(error)
