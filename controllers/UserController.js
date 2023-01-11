@@ -36,7 +36,7 @@ class UserController {
                 id: user.id
             }
             let access_token = createToken(payload)
-            res.status(200).json({ access_token, username: user.username })
+            res.status(200).json({ access_token, username: user.username,  isSubscribed: user.isSubscribed })
         } catch (error) {
             next(error)
         }
