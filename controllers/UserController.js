@@ -39,7 +39,7 @@ class UserController {
             next(error)
         }
     }
-    static async addFavoriteNews(req, res, next) {
+    static async addFavoriteIdol(req, res, next) {
         try {
             let IdolId = req.params.IdolId
             let findIdol = await Idol.findOne({
@@ -58,7 +58,7 @@ class UserController {
             next(error)
         }
     }
-    static async favoriteNewsList(req, res, next) {
+    static async favoriteIdolList(req, res, next) {
         const { filter } = req.query;
         let UserId = req.user.id
         const paramQuerySQL = {

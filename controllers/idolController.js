@@ -9,12 +9,12 @@ class IdolController {
             include: [
                 {
                     model: Branch,
-                    attributes:{
+                    attributes: {
                         exclude: ['createdAt', 'updatedAt']
                     },
                 }
             ],
-            attributes:{
+            attributes: {
                 exclude: ['createdAt', 'updatedAt']
             },
             order: [['id', 'asc']]
@@ -109,6 +109,32 @@ class IdolController {
         }).catch(function (error) {
             console.error(error);
         });
+    }
+    static async findIdolById(req, res, next) {
+        try {
+            let { IdolId } = req.params
+            let data = await Idol.findOne({
+                include: [
+                    {
+                        model: Branch,
+                        attributes: {
+                            exclude: ['createdAt', 'updatedAt']
+                        },
+                    }
+                ],
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt']
+                },
+                where: { id: IdolId },
+                order: [['id', 'asc']]
+            })
+            if (!data) {
+                throw { name: 'Data Not Found' }
+            }
+            res.status(200).json(data)
+        } catch (error) {
+            next(error)
+        }
     }
 }
 
