@@ -125,8 +125,7 @@ class IdolController {
                 attributes: {
                     exclude: ['createdAt', 'updatedAt']
                 },
-                where: { id: IdolId },
-                order: [['id', 'asc']]
+                where: { id: IdolId }
             })
             if (!data) {
                 throw { name: 'Data Not Found' }
