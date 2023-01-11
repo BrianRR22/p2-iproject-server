@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
+router.get('/', authentication, UserController.findUser)
 router.patch('/subscription', authentication, UserController.subscription)
 router.post('/generate-midtrans-token', authentication, UserController.generateMidtransToken)
 router.get('/idols/favorites', authentication, UserController.favoriteIdolList)

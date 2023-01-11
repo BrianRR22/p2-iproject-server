@@ -139,6 +139,21 @@ class UserController {
             next(error)
         }
     }
+    static async findUser(req, res, next) {
+        try {
+            let data = await User.findOne({
+                attributes: {
+                    exclude: ['password']
+                },
+                where: {
+                    id: req.user.id
+                }
+            })
+            res.status(200).json(data)
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = UserController
