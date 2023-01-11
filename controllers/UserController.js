@@ -8,11 +8,12 @@ class UserController {
     static async register(req, res, next) {
         try {
             let { username, email, password } = req.body
-            let customer = await User.create({ username, email, password })
+            let user = await User.create({ username, email, password })
             res.status(201).json({
-                message: `Customer with email ${customer.email} has been created with id ${customer.id}`,
-                id: customer.id,
-                email: customer.email
+                message: `User with email ${user.email} has been created with id ${user.id}`,
+                id: user.id,
+                email: user.email,
+                isSubscribed: user.isSubscribed
             })
         } catch (error) {
             next(error)
@@ -96,6 +97,16 @@ class UserController {
         try {
             let data = await Idol.findAll(paramQuerySQL)
             res.status(200).json(data)
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async subscription(req, res, next) {
+        try {
+            let subs = await User.update({ isSubscribed: true }, { where: { id: req.user.id } })
+            res.status(200).json({
+                message: `User with id ${req.user.id} now is a subscriber`
+            })
         } catch (error) {
             next(error)
         }
