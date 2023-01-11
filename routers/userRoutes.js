@@ -6,8 +6,9 @@ const router = express.Router()
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
 router.get('/idols/favorites', authentication, UserController.favoriteIdolList)
-router.post('/idols/:IdolId', authentication, UserController.addFavoriteIdol)
 router.patch('/subscription', UserController.subscription)
+router.post('/idols/:IdolId', authentication, UserController.addFavoriteIdol)
+router.delete('/idols/:id', authentication, UserController.deleteFavoriteIdol)
 
 
 
