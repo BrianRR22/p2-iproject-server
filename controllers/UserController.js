@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const { comparePassword } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
 const { Idol, User, Favorite, Branch } = require('../models')
+const midtransClient = require('midtrans-client');
 
 
 class UserController {
@@ -107,6 +108,33 @@ class UserController {
             res.status(200).json({
                 message: `User with id ${req.user.id} now is a subscriber`
             })
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async generateMidtransToken(req, res, next) {
+        try {
+            const findUser= await User.findByPk(req.user.id)
+            if(findUser.isSubscribed === true) throw {name: 'already_subscribed'}
+            let snap = new midtransClient.Snap({
+                // Set to true if you want Production Environment (accept real transaction).
+                isProduction : false,
+                serverKey : process.env.MIDTRANS_SERVER_KEY
+            });
+            let parameter = {
+                "transaction_details": {
+                    "order_id": "TRANSACTION_" + Math.floor(1000000 + Math.random() * 9000000),
+                    "gross_amount": 200000
+                },
+                "credit_card":{
+                    "secure" : true
+                },
+                "customer_details": {
+                    "email": findUser.email,
+                }
+            };
+            const midtransToken= await snap.createTransaction(parameter)
+            res.status(201).json(midtransToken)
         } catch (error) {
             next(error)
         }

@@ -20,6 +20,10 @@ module.exports = (error, req, res, next) => {
             message = error.errors[0].message
             status = 400
             break;
+        case 'already_subscribed':
+            message = 'You already a subscriber'
+            status = 400
+            break;
         case 'Unauthenticated':
         case 'JsonWebTokenError':
             status = 401
