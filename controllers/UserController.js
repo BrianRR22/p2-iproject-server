@@ -2,6 +2,7 @@ const { Op } = require('sequelize')
 const { comparePassword } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
 const { Idol, User, Favorite, Branch } = require('../models')
+const { OAuth2Client } = require('google-auth-library');
 const midtransClient = require('midtrans-client');
 const nodemailer= require('nodemailer')
 
@@ -116,6 +117,34 @@ class UserController {
             }
             let access_token = createToken(payload)
             res.status(200).json({ access_token, username: user.username,  isSubscribed: user.isSubscribed })
+        } catch (error) {
+            next(error)
+        }
+    }
+    static async loginWithGoogle(req, res, next) {
+        try {
+            const googleAuthToken = req.headers.google_auth_token
+
+            const CLIENT_ID = process.env.CLIENT_ID
+            const client = new OAuth2Client(CLIENT_ID);
+
+            const ticket = await client.verifyIdToken({
+                idToken: googleAuthToken,
+                audience: CLIENT_ID,
+            });
+            const { name, email } = ticket.getPayload();
+            const [user, created] = await User.findOrCreate({
+                where: { email },
+                defaults: {
+                    username: name,
+                    email,
+                    password: 'thisispassword',
+                    isSubscribed: false
+                },
+                hooks: false
+            })
+            let access_token = createToken({ id: user.id })
+            res.status(200).json({ access_token, username: user.username, isSubscribed: user.isSubscribed })
         } catch (error) {
             next(error)
         }
