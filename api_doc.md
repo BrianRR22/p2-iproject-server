@@ -7,7 +7,6 @@ List of available endpoints:
 
 - `POST /users/register`
 - `POST /users/login`
-- `POST /users/google-login` 
 - `GET /users`
 - `PATCH /users/subscription`
 - `POST /users/generate-midtrans-token`
@@ -127,49 +126,7 @@ _Response (401 - InvalidCredentials)_
 
 &nbsp;
 
-
-## 3. POST /google-login
-
-Description:
-- Login with google account
-
-Request:
-
-- headers:
-
-```json
-{
-  "google_auth_token": "string"
-}
-```
-
-
-- body:
-
-```json
-{
-  "username": "string",
-  "email": "string",
-  "password": "string",
-  "phoneNumber": "string",
-  "address": "string"
-}
-```
-
-_Response (200 - OK)_
-
-```json
-{
-  "access_token": "string",
-  "username": "string",
-  "role": "string",
-}
-```
-
-&nbsp;
-
-
-## 4. GET /users
+## 3. GET /users
 
 Description:
 - Find user
@@ -208,7 +165,7 @@ _Response (200 - Ok)_
 
 &nbsp;
 
-## 5. PATCH /users/subscription
+## 4. PATCH /users/subscription
 
 Description:
 - Update status subscribed
@@ -241,7 +198,7 @@ _Response (404 - already subs)_
 
 &nbsp;
 
-## 6. POST /generate-midtrans-token
+## 5. POST /generate-midtrans-token
 
 Description:
 - Generate payment
@@ -275,7 +232,7 @@ _Response (404 - Not Found)_
 
 &nbsp;
 
-## 7. GET /users/idols/favorites
+## 6. GET /users/idols/favorites
 
 Description:
 - Get favorite idol data 
@@ -344,7 +301,7 @@ _Response (200 - OK)_
 &nbsp;
 
 
-## 8. POST /users/idols/:IdolId
+## 7. POST /users/idols/:IdolId
 
 Description:
 - Add favorite idol
@@ -388,7 +345,7 @@ _Response (404 - Not Found)_
 &nbsp;
 
 
-## 9. DELETE /users/idols/:id
+## 8. DELETE /users/idols/:id
 
 Description:
 - Delete favorite idol from list
@@ -442,7 +399,7 @@ _Response (404 - Not Found)_
 
 
 
-## 10. GET /idols
+## 9. GET /idols
 
 Description:
 - Get Idols from database
@@ -474,7 +431,7 @@ _Response (200 - OK)_
 &nbsp;
 
 
-## 11. GET /idols/branches
+## 10. GET /idols/branches
 
 Description:
 - Get idol branch from database
@@ -509,7 +466,7 @@ _Response (200 - OK)_
 &nbsp;
 
 
-## 12. GET /idols/:IdolId
+## 11. GET /idols/:IdolId
 
 Description:
 - Find idol by Id
@@ -556,7 +513,7 @@ _Response (404 - Not Found)_
 &nbsp;
 
 
-## 13. GET /songs/:id
+## 12. GET /songs/:id
 
 Description:
 - Get data song from spotify
@@ -638,7 +595,7 @@ _Response (404 - Not Found)_
 
 
 
-## 14. GET /video/:youtubeId
+## 13. GET /video/:youtubeId
 
 Description:
 - Get video from youtube by id

@@ -3,6 +3,7 @@ const { comparePassword } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
 const { Idol, User, Favorite, Branch } = require('../models')
 const midtransClient = require('midtrans-client');
+const nodemailer= require('nodemailer')
 
 
 class UserController {
@@ -31,6 +32,45 @@ class UserController {
             }
             let compared = comparePassword(password, user.password)
             if (!compared) throw { name: 'InvalidCredentials' }
+
+            let transporter = nodemailer.createTransport({
+                service:'gmail',
+                auth: {
+                  user: process.env.EMAIL,
+                  pass: process.env.PASS
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
+              });
+
+            const sendEmail= (emailSend) => {
+                const option= {
+                    from: "AKUNRESMI",
+                    to: emailSend,
+                    subject: "Someone Login",
+                    text: `Dear ${emailSend},
+
+                    We are pleased to inform you that your account for HLLV Production has been login. You can now access our services such as:
+                    
+                    - Add favorite idol
+                    - Become a member (if not subscribed)
+                    
+                    Please keep this email for your records, as you will need your login information to access your account in the future. If you have any issues logging in, please contact us at HLLV-Production/contact.
+                    
+                    Thank you for choosing HLLV Production for your needs.
+                    
+                    Best regards,
+                    HLLV Production`
+                }
+
+                transporter.sendMail(option, (err, info) => {
+                    if(err) return console.log(err);
+                    console.log(`Emails: Send to ${emailSend}`);
+                })
+            }
+            
+            sendEmail(email)
 
             let payload = {
                 id: user.id
