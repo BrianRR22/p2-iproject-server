@@ -6,7 +6,6 @@ router.get('/', IdolController.showIdol)
 router.get('/branches', IdolController.showBranches)
 router.get('/:IdolId', IdolController.findIdolById)
 router.get('/songs/:id', IdolController.idolSong)
-router.get('/youtube/:youtubeId', IdolController.idolYoutube)
 router.get('/video/:youtubeId', IdolController.idolYoutubeVideo)
 
 

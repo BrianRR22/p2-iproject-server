@@ -34,7 +34,6 @@ class IdolController {
             let data = await Idol.findAll(paramQuerySQL)
             res.status(200).json(data)
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }
@@ -65,32 +64,6 @@ class IdolController {
             }).catch(function (error) {
                 console.error(error);
             });
-    }
-    static idolYoutube(req, res, next) {
-        let youtubeId = req.params.youtubeId
-        const options = {
-            method: 'GET',
-            url: 'https://youtube138.p.rapidapi.com/channel/details/',
-            params: { id: youtubeId, hl: 'en', gl: 'US' },
-            headers: {
-                'X-RapidAPI-Key': '37f62bd33cmshc44f509dac943b4p140114jsn4a30c69863c7',
-                'X-RapidAPI-Host': 'youtube138.p.rapidapi.com'
-            }
-        };
-
-        axios.request(options).then(function (response) {
-            let statistics = response.data.stats
-            res.status(200).json({
-                title: response.data.title,
-                username: response.data.username,
-                joined: response.data.joinedDateText,
-                url: 'https://www.youtube.com/channel/' + youtubeId,
-                statistics,
-                description: response.data.description,
-            });
-        }).catch(function (error) {
-            console.error(error);
-        });
     }
     static idolYoutubeVideo(req, res, next) {
         let youtubeId = req.params.youtubeId
